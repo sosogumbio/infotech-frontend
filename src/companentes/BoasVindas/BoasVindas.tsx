@@ -10,6 +10,7 @@ function BoasVindas(): JSX.Element {
                 completo de produtos, estoque e movimentações, garantindo uma
                 administração rápida, organizada e segura para o seu negócio.
             </p>
+
         </main>
     );
 }
