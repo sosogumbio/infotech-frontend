@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { listarProdutos } from "../../companentes/fetch/ProdutoRequest";
-import type { ProdutoDTO } from "../../companentes/dto/ProdutoDTO";
+import { listarProdutos } from "../../componentes/fetch/ProdutoRequest";
+import type { ProdutoDTO } from "../../componentes/dto/ProdutoDTO";
 
 export default function PListagemProdutos() {
   const [produtos, setProdutos] = useState<ProdutoDTO[]>([]);
