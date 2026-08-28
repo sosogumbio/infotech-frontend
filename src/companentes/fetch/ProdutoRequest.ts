@@ -1,18 +1,13 @@
-const Produtorequest = {
-  async listar(): Promise<unknown[]> {
-    try {
-      const urlBase = import.meta.env.VITE_API_URL ?? "";
-      const resposta = await fetch(`${urlBase}/produtos`);
+import api from "./api"
+import type { ProdutoDTO } from "../dto/ProdutoDTO";
 
-      if (!resposta.ok) {
-        return [];
-      }
+export async function listarProdutos() {
+  const response = await api.get("/api/produtos");
+  return response.data;
+}
 
-      return (await resposta.json().catch(() => [])) as unknown[];
-    } catch {
-      return [];
-    }
-  },
-};
+export async function cadastrarProduto(produto: ProdutoDTO) {
+  const response = await api.post("/api/produtos", produto);
+  return response.data;
+}
 
-export default Produtorequest;
