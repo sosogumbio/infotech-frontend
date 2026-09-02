@@ -1,16 +1,21 @@
-import type { JSX } from "react";
-import BoasVindas from "../../componentes/BoasVindas/BoasVindas";
+import { type JSX } from "react";
 import Navegacao from "../../componentes/Navegacao/Navegacao";
+import LoginForm from "../../componentes/FormLogin/FormLogin";
 import Rodape from "../../componentes/Rodape/Rodape";
- 
-function PHome(): JSX.Element {
+
+
+function PLogin(): JSX.Element {
     return (
         <div className="min-h-screen flex flex-col">
+       
             <Navegacao />
-            <BoasVindas />
+
+         
+            <LoginForm />
+
             <Rodape />
         </div>
     );
 }
 
-export default PHome;
+export default PLogin;

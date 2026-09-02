@@ -1,66 +1,63 @@
-import type {CategoriaDTO} from "../../dto/CategoriaDTO";
+import type {ProdutoDTO} from "../dto/ProdutoDTO";
 const API_URL = import.meta.env.VITE_API_SERVER_URL;
 
-class CategoriaRequests {
-    listarCategorias() {
-        throw new Error('Method not implemented.');
-    }
+class ProdutoRequests {
     private serverUrl;
-    private endpointCategoria;
+    private endpointProduto;
     constructor() {
         this.serverUrl = API_URL;
-        this.endpointCategoria = '/api/categorias';
+        this.endpointProduto = '/api/produtos';
     }
-    async obterListaDeCategorias() {
+    async obterListaDeProdutos() {
         try {
             const token = localStorage.getItem('token');
-            const respostaAPI = await fetch(`${this.serverUrl}${this.endpointCategoria}`, {
+            const respostaAPI = await fetch(`${this.serverUrl}${this.endpointProduto}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'x-access-token': `${token}`
                 }
             });
             if (respostaAPI.ok) {
-                const listaDeCategorias = await respostaAPI.json();
-                return listaDeCategorias;
+                const listaDeProdutos = await respostaAPI.json();
+                return listaDeProdutos;
             } else {
-                throw new Error(`Não foi possível listar as categorias.`);
+                throw new Error(`Não foi possível listar os produtos.`);
             }
         } catch (error) {
-            console.error(`Erro ao fazer a consulta de categorias. ${error}`);
+            console.error(`Erro ao fazer a consulta de produtos. ${error}`);
             return;
         }
     }
-    async obterCategoriaPorId(id_categoria: number): Promise<CategoriaDTO | undefined> {
+    async obterProdutoPorId(id_produto: number): Promise<ProdutoDTO | undefined> {
         try {
             const token = localStorage.getItem('token');
-            const respostaAPI = await fetch(`${this.serverUrl}${this.endpointCategoria}/${id_categoria}`, {
+            const respostaAPI = await fetch(`${this.serverUrl}${this.endpointProduto}/${id_produto}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'x-access-token': `${token}`
                 }
             });
             if (respostaAPI.ok) {
-                const categoria: CategoriaDTO = await respostaAPI.json();
-                return categoria;
+                const produto: ProdutoDTO = await respostaAPI.json();
+                return produto;
             } else {
-                throw new Error("Não foi possível buscar a categoria.");
+                throw new Error("Não foi possível buscar o produto.");
             }
         } catch (error) {
-            console.error(`Erro ao fazer a consulta de categoria por ID. ${error}`);
+            console.error(`Erro ao fazer a consulta de produto por ID. ${error}`);
             return;
         }
     }
-    async enviarFormularioCategoria(formCategoria: CategoriaDTO): Promise<boolean> {
+    async enviarFormularioProduto(formProduto: ProdutoDTO): Promise<boolean> {
         try {
             const token = localStorage.getItem('token');
-            const respostaAPI = await fetch(`${this.serverUrl}${this.endpointCategoria}`, {
+            const respostaAPI = await fetch(`${this.serverUrl}${this.endpointProduto}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'x-access-token': `${token}`
                 },
-                body: JSON.stringify(formCategoria)
+                body: JSON.stringify(formProduto)
             });
             if(!respostaAPI.ok) throw new Error(`Erro ${respostaAPI.status}: ${respostaAPI.statusText}`);
             console.info(`${respostaAPI.status}: ${respostaAPI.statusText}`);
@@ -70,16 +67,16 @@ class CategoriaRequests {
             return false;
         }
     }
-    async atualizarCategoria(id_categoria: number, formCategoria: CategoriaDTO): Promise<boolean> {
+    async atualizarProduto(id_produto: number, formProduto: ProdutoDTO): Promise<boolean> {
         try {
             const token = localStorage.getItem('token');
-            const respostaAPI = await fetch(`${this.serverUrl}${this.endpointCategoria}/${id_categoria}`, {
+            const respostaAPI = await fetch(`${this.serverUrl}${this.endpointProduto}/${id_produto}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'x-access-token': `${token}`
                 },
-                body: JSON.stringify(formCategoria)
+                body: JSON.stringify(formProduto)
             });
             if(!respostaAPI.ok) throw new Error(`Erro ${respostaAPI.status}: ${respostaAPI.statusText}`);
             console.info(`${respostaAPI.status}: ${respostaAPI.statusText}`);
@@ -89,10 +86,10 @@ class CategoriaRequests {
             return false;
         }
     }
-    async removerCategoria(id_categoria: number): Promise<boolean> {
+    async removerProduto(id_produto: number): Promise<boolean> {
         try {
             const token = localStorage.getItem('token');
-            const respostaAPI = await fetch(`${this.serverUrl}${this.endpointCategoria}/${id_categoria}`, {
+            const respostaAPI = await fetch(`${this.serverUrl}${this.endpointProduto}/${id_produto}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -112,4 +109,4 @@ class CategoriaRequests {
         }
     }
 }
-export default new CategoriaRequests;
+export default new ProdutoRequests;

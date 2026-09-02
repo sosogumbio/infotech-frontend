@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { listarMovimentacoes } from '../../componentes/fetch/MovimentacaoRequest'
+import { listarMovimentacoes } from '../../fetch/MovimentacaoRequest'
 import type { MovimentacaoDTO } from '../../dto/MovimentacaoDTO'
 
 export default function PListagemMovimentacoes() {
