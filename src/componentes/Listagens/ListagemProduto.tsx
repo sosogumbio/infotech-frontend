@@ -1,4 +1,4 @@
-    import type { ProdutoDTO } from '../../componentes/dto/ProdutoDTO'; 
+    import type { ProdutoDTO } from '../dto/ProdutoDTO'; 
 
 const API_URL = import.meta.env.VITE_API_SERVER_URL;
 
