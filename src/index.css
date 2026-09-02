@@ -1,70 +1,10 @@
-:root {
-  font-family: 'Segoe UI', Inter, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color: #0f172a;
-  background: #07111f;
-  color-scheme: light;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import "tailwindcss";
 
-  --bg-dark: #050b14;
-  --bg-panel: #0d1b2a;
-  --bg-soft: #f4f8ff;
-  --card: rgba(255, 255, 255, 0.96);
-  --blue-900: #a7d8ff;
-  --blue-700: #8fd0ff;
-  --blue-600: #6fc2ff;
-  --blue-500: #4fb7ff;
-  --blue-300: #d4efff;
-  --text-primary: #0b0b0b;
-  --text-muted: #53657d;
-  --line: #dfe9f6;
-  --white: #ffffff;
-  --black: #020b13;
-  --success: #15803d;
-  --success-bg: #dcfce7;
-  --error: #dc2626;
-  --error-bg: #fee2e2;
-  --shadow: 0 22px 48px rgba(79, 183, 255, 0.12);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
+html, body, #root {
   margin: 0;
-  min-height: 100vh;
-  background: linear-gradient(180deg, #f6fbff 0%, #f3f7fc 100%);
-  color: var(--text-primary);
-}
-
-button,
-input {
-  font: inherit;
-}
-
-#root {
-  min-height: 100vh;
+  min-height: 100%;
   width: 100%;
-  max-width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #000000;
+  color: #2dd4bf;
 }
-
-h2 {
-  margin: 0;
-  color: var(--text-primary);
-  font-size: clamp(1.6rem, 2vw, 2rem);
-  font-weight: 700;
-}
-
-input::placeholder {
-  color: #7d8ca5;
-}
-
