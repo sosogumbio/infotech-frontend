@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { listarCategorias, excluirCategoria } from '../../componentes/fetch/CategoriaRequest'
-import type { CategoriaDTO } from '../../componentes/dto/CategoriaDTO'
+import type { CategoriaDTO } from '../../dto/CategoriaDTO'
 
 export default function PListagemCategorias() {
   const [categorias, setCategorias] = useState<CategoriaDTO[]>([])

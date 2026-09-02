@@ -1,4 +1,4 @@
-import type {CategoriaDTO} from "../dto/CategoriaDTO";
+import type {CategoriaDTO} from "../../dto/CategoriaDTO";
 const API_URL = import.meta.env.VITE_API_SERVER_URL;
 
 class CategoriaRequests {

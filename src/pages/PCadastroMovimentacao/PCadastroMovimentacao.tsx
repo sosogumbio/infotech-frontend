@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { cadastrarMovimentacao } from '../../componentes/fetch/MovimentacaoRequest'
-import type { MovimentacaoCreateDTO } from '../../componentes/dto/MovimentacaoDTO'
+import type { MovimentacaoCreateDTO } from '../../dto/MovimentacaoDTO'
 
 export default function PCadastroMovimentacao() {
   const [form, setForm] = useState({

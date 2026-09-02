@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { cadastrarProduto } from "../../componentes/fetch/ProdutoRequest";
-import type { ProdutoDTO } from "../../componentes/dto/ProdutoDTO";
+import type { ProdutoDTO } from "../../dto/ProdutoDTO";
 
 export default function PCadastroProduto() {
   const [form, setForm] = useState({

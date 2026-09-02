@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { listarMovimentacoes } from '../../componentes/fetch/MovimentacaoRequest'
-import type { MovimentacaoDTO } from '../../componentes/dto/MovimentacaoDTO'
+import type { MovimentacaoDTO } from '../../dto/MovimentacaoDTO'
 
 export default function PListagemMovimentacoes() {
   const [movs, setMovs] = useState<MovimentacaoDTO[]>([])
