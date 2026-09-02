@@ -12,7 +12,7 @@ class MovimentacaoRequests {
         this.endpointMovimentacao = '/api/movimentacoes';
     }
 
-    async obterListaDeMovimentacoes() {
+    async obterListaDeMovimentacoes(): Promise<MovimentacaoDTO[]> {
 
         try {
 
@@ -30,7 +30,8 @@ class MovimentacaoRequests {
 
             if (respostaAPI.ok) {
 
-                const listaDeMovimentacoes = await respostaAPI.json();
+                const listaDeMovimentacoes: MovimentacaoDTO[] =
+                    await respostaAPI.json();
 
                 return listaDeMovimentacoes;
 
@@ -48,8 +49,7 @@ class MovimentacaoRequests {
                 `Erro ao fazer a consulta de movimentações. ${error}`
             );
 
-            return;
-
+            return [];
         }
     }
 
@@ -94,7 +94,6 @@ class MovimentacaoRequests {
             );
 
             return;
-
         }
     }
 
@@ -122,9 +121,11 @@ class MovimentacaoRequests {
             );
 
             if (!respostaAPI.ok) {
+
                 throw new Error(
                     `Erro ${respostaAPI.status}: ${respostaAPI.statusText}`
                 );
+
             }
 
             console.info(
@@ -140,7 +141,6 @@ class MovimentacaoRequests {
             );
 
             return false;
-
         }
     }
 
@@ -169,9 +169,11 @@ class MovimentacaoRequests {
             );
 
             if (!respostaAPI.ok) {
+
                 throw new Error(
                     `Erro ${respostaAPI.status}: ${respostaAPI.statusText}`
                 );
+
             }
 
             console.info(
@@ -187,7 +189,6 @@ class MovimentacaoRequests {
             );
 
             return false;
-
         }
     }
 
@@ -238,9 +239,8 @@ class MovimentacaoRequests {
             );
 
             throw error;
-
         }
     }
 }
 
-export default new MovimentacaoRequests;
+export default new MovimentacaoRequests();
