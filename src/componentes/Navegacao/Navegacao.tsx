@@ -1,7 +1,7 @@
 import { useState, type JSX } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import AuthRequests from "../fetch/AuthRequests";
-import avatarImage from "../../assets/fotoperfil.jpg";
+import avatarImage from "../../assets/foto-soso.webp";
 
 function Navegacao(): JSX.Element {
     const [menuAberto, setMenuAberto] = useState(false);
