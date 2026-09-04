@@ -1,6 +1,6 @@
 import { type JSX } from "react";
 import Navegacao from "../../componentes/Navegacao/Navegacao";
-//import DetalhesMovimentacao from "../../componentes/Detalhes/DetalhesMovimentacao";
+import DetalhesMovimentacao from "../../componentes/Detalhes/DetalhesMovimentacao";
 import Rodape from "../../componentes/Rodape/Rodape";
 
 
