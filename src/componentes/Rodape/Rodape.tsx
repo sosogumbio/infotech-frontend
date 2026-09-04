@@ -2,18 +2,19 @@ import type { JSX } from "react";
 
 function Rodape(): JSX.Element {
     return (
-        <footer className="bg-[#0a0f0e] border-t border-[#1c2b29] flex flex-col md:flex-row items-center justify-between gap-3 px-6 py-5">
+        <footer className="flex flex-col items-center justify-between gap-3 border-t border-[#b51b78] bg-[#c2187a] px-6 py-5 text-white md:flex-row">
             <div className="flex items-center gap-2">
-                <span className="text-[#2dd4bf] font-bold text-sm sm:text-base">
+                <span className="text-sm font-bold text-white sm:text-base">
                     InfoTech
                 </span>
-                <span className="text-slate-500 text-xs sm:text-sm">
+
+                <span className="text-xs text-white/80 sm:text-sm">
                     © {new Date().getFullYear()} — Todos os direitos reservados
                 </span>
             </div>
 
-            <p className="text-slate-400 text-xs sm:text-sm">
-                Desenvolvido por Tauane Souza
+            <p className="text-xs text-white/90 sm:text-sm">
+                Desenvolvido por Sophia Gumbio
             </p>
         </footer>
     );

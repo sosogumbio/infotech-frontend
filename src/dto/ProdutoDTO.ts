@@ -1,9 +1,10 @@
-export interface ProdutoDTO {
-  id_categoria: number;
-  codigo: string;
-  nome: string;
-  descricao?: string;
-  preco_unitario: number;
-  quantidade_disponivel: number;
-  quantidade_minima: number;
+export default interface ProdutoDTO {
+    id_produto: number;
+    id_categoria: number;
+    codigo: string;
+    nome: string;
+    descricao: string;
+    preco_unitario: number;
+    quantidade_disponivel: number;
+    quantidade_minima: number;
 }

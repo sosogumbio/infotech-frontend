@@ -1,20 +1,25 @@
 import type { JSX } from "react";
+
 function BoasVindas(): JSX.Element {
     return (
-        <main className="flex-1 bg-black flex items-center justify-center px-6 py-20">
-            <section className="max-w-4xl text-center">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-teal-400 mb-6">
+        <main className="flex flex-1 items-center justify-center bg-[#fff0f8] px-6 py-20">
+            <section className="max-w-5xl text-center">
+                <h1 className="mb-6 text-5xl font-bold text-[#8f216d] sm:text-6xl">
                     InfoTech
                 </h1>
-                <p className="text-base sm:text-lg md:text-xl text-teal-300 leading-relaxed">
-                    Seja bem-vindo à InfoTech, o lugar certo pra quem gosta de
-                    tecnologia de verdade. Trabalhamos com os melhores produtos
-                    do mercado, sempre com preço justo e entrega rápida. Nosso
-                    time está pronto pra te ajudar a escolher o que combina com
-                    você. Explore nosso catálogo e descubra novidades incríveis!
+
+                <p className="text-lg leading-relaxed text-[#7a3d68] sm:text-xl">
+                    Seja bem-vindo à InfoTech, a sua loja de produtos de
+                    tecnologia! Explore nossa ampla variedade de produtos,
+                    desde os mais recentes gadgets até acessórios essenciais
+                    para o seu dia a dia. Aproveite nossas ofertas exclusivas
+                    e descubra as últimas tendências em tecnologia. Estamos
+                    aqui para proporcionar a melhor experiência de compra para
+                    você!
                 </p>
             </section>
         </main>
     );
 }
+
 export default BoasVindas;
