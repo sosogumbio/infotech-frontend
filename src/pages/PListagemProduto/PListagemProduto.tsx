@@ -1,18 +1,19 @@
 import { type JSX } from "react";
 import Navegacao from "../../componentes/Navegacao/Navegacao";
-import ListagemProdutos from "../../componentes/Listagens/ListagemProduto";
 import Rodape from "../../componentes/Rodape/Rodape";
+import DetalhesProduto from "../../componentes/Detalhes/DetalhesProduto";
 
-function PListagemProduto(): JSX.Element {
+
+function PDetalhesProduto(): JSX.Element {
     return (
         <div className="flex min-h-screen flex-col bg-slate-100">
             <Navegacao />
 
-            <ListagemProdutos />
+            <DetalhesProduto />
 
             <Rodape />
         </div>
     );
 }
 
-export default PListagemProduto;
+export default PDetalhesProduto;
