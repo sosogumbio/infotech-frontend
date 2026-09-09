@@ -1,8 +1,9 @@
 
 import { type JSX } from "react";
 import Navegacao from "../../../componentes/Navegacao/Navegacao";
-import AtualizarCategoria from "../../../components/Atualizar/AtualizarCategoria";
-import Rodape from "../../../components/Rodape/Rodape";
+import AtualizarCategoria from "../../../componentes/Atualizar/AtualizarCategoria";
+import Rodape from "../../../componentes/Rodape/Rodape
+";
 
 function PAtualizarCategoria(): JSX.Element {
     return (
