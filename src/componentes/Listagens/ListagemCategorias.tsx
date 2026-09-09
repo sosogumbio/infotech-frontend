@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import type  CategoriaDTO  from "../../dto/CategoriaDTO";
+import type CategoriaDTO from "../../dto/CategoriaDTO";
 import CategoriaRequests from "../../fetch/CategoriaRequest";
 
 function ListagemCategorias() {
     const navigate = useNavigate();
-
-    // =========================================================
-    // ESTADOS
-    // =========================================================
 
     const [categorias, setCategorias] = useState<CategoriaDTO[]>([]);
     const [busca, setBusca] = useState("");
@@ -18,15 +14,7 @@ function ListagemCategorias() {
 
     const rowsPerPage = 5;
 
-    // =========================================================
-    // VALIDAÇÃO DE DADOS NO FRONTEND
-    // =========================================================
-
-    function validarCategoria(
-        categoria: CategoriaDTO
-    ): boolean {
-
-        // Validação do ID
+    function validarCategoria(categoria: CategoriaDTO): boolean {
         if (
             categoria.id_categoria === undefined ||
             categoria.id_categoria === null ||
@@ -42,7 +30,6 @@ function ListagemCategorias() {
             return false;
         }
 
-        // Validação do nome
         if (
             typeof categoria.nome !== "string" ||
             categoria.nome.trim() === ""
@@ -55,10 +42,7 @@ function ListagemCategorias() {
             return false;
         }
 
-        // Validação do tamanho do nome
-        if (
-            categoria.nome.trim().length > 100
-        ) {
+        if (categoria.nome.trim().length > 100) {
             console.error(
                 "Categoria inválida: o nome não pode possuir mais de 100 caracteres.",
                 categoria
@@ -70,279 +54,136 @@ function ListagemCategorias() {
         return true;
     }
 
-    // =========================================================
-    // BUSCAR CATEGORIAS
-    // =========================================================
-
     useEffect(() => {
-
         async function buscarCategorias() {
-
             try {
-
                 setCarregando(true);
 
                 const resposta =
                     await CategoriaRequests.obterListaDeCategorias();
 
-                console.log(
-                    "Categorias recebidas da API:",
-                    resposta
-                );
+                console.log("Categorias recebidas da API:", resposta);
 
-                // Verifica se a resposta é uma lista
                 if (!Array.isArray(resposta)) {
-
-                    console.error(
-                        "A API retornou um formato inválido."
-                    );
-
+                    console.error("A API retornou um formato inválido.");
                     setCategorias([]);
-
                     return;
                 }
 
-                // Validação dos dados recebidos
-                const categoriasValidas =
-                    resposta.filter(
-                        (categoria) =>
-                            validarCategoria(categoria)
-                    );
-
-                setCategorias(
-                    categoriasValidas
+                const categoriasValidas = resposta.filter((categoria) =>
+                    validarCategoria(categoria)
                 );
 
-                // Informa no console caso existam
-                // categorias inválidas
-                if (
-                    categoriasValidas.length !==
-                    resposta.length
-                ) {
+                setCategorias(categoriasValidas);
 
+                if (categoriasValidas.length !== resposta.length) {
                     console.warn(
                         "Algumas categorias foram ignoradas porque possuem dados inválidos."
                     );
                 }
-
             } catch (error) {
-
-                console.error(
-                    "Erro ao buscar categorias:",
-                    error
-                );
+                console.error("Erro ao buscar categorias:", error);
 
                 setCategorias([]);
 
-                alert(
-                    "Não foi possível carregar as categorias."
-                );
-
+                alert("Não foi possível carregar as categorias.");
             } finally {
-
                 setCarregando(false);
-
             }
         }
 
         buscarCategorias();
-
     }, []);
 
-    // =========================================================
-    // FILTRO / BUSCA
-    // =========================================================
+    const termoBusca = busca.trim().toLowerCase();
 
-    const termoBusca =
-        busca.trim().toLowerCase();
-
-    const categoriasFiltradas =
-        categorias.filter(
-            (categoria) => {
-
-                // Se não existe busca,
-                // mostra todas as categorias
-                if (!termoBusca) {
-                    return true;
-                }
-
-                const nome =
-                    categoria.nome
-                        ?.toLowerCase() ?? "";
-
-                const id =
-                    String(
-                        categoria.id_categoria
-                    );
-
-                return (
-                    nome.includes(
-                        termoBusca
-                    ) ||
-                    id.includes(
-                        termoBusca
-                    )
-                );
-            }
-        );
-
-    // =========================================================
-    // PAGINAÇÃO
-    // =========================================================
-
-    const totalPages =
-        Math.max(
-            1,
-            Math.ceil(
-                categoriasFiltradas.length /
-                rowsPerPage
-            )
-        );
-
-    const indexOfFirstRow =
-        (currentPage - 1) *
-        rowsPerPage;
-
-    const indexOfLastRow =
-        indexOfFirstRow +
-        rowsPerPage;
-
-    const currentCategorias =
-        categoriasFiltradas.slice(
-            indexOfFirstRow,
-            indexOfLastRow
-        );
-
-    // Garante que a página atual
-    // nunca ultrapasse o total
-    useEffect(() => {
-
-        if (
-            currentPage >
-            totalPages
-        ) {
-            setCurrentPage(
-                totalPages
-            );
+    const categoriasFiltradas = categorias.filter((categoria) => {
+        if (!termoBusca) {
+            return true;
         }
 
-    }, [
-        currentPage,
-        totalPages
-    ]);
+        const nome = categoria.nome?.toLowerCase() ?? "";
+        const id = String(categoria.id_categoria);
 
-    function mudarPagina(
-        page: number
-    ) {
+        return nome.includes(termoBusca) || id.includes(termoBusca);
+    });
 
+    const totalPages = Math.max(
+        1,
+        Math.ceil(categoriasFiltradas.length / rowsPerPage)
+    );
+
+    const indexOfFirstRow = (currentPage - 1) * rowsPerPage;
+    const indexOfLastRow = indexOfFirstRow + rowsPerPage;
+
+    const currentCategorias = categoriasFiltradas.slice(
+        indexOfFirstRow,
+        indexOfLastRow
+    );
+
+    useEffect(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(totalPages);
+        }
+    }, [currentPage, totalPages]);
+
+    function mudarPagina(page: number) {
         if (page < 1) {
-
             setCurrentPage(1);
-
             return;
         }
 
-        if (
-            page >
-            totalPages
-        ) {
-
-            setCurrentPage(
-                totalPages
-            );
-
+        if (page > totalPages) {
+            setCurrentPage(totalPages);
             return;
         }
 
         setCurrentPage(page);
     }
 
-    // =========================================================
-    // CAMPO DE BUSCA
-    // =========================================================
-
     function handleBusca(
         event: React.ChangeEvent<HTMLInputElement>
     ) {
+        const valor = event.target.value;
 
-        const valor =
-            event.target.value;
-
-        // Validação do campo de busca
-        // Limita a quantidade de caracteres
-        if (
-            valor.length > 100
-        ) {
+        if (valor.length > 100) {
             return;
         }
 
         setBusca(valor);
-
-        // Volta para a primeira página
-        // quando a busca muda
         setCurrentPage(1);
     }
 
-    // =========================================================
-    // REMOVER CATEGORIA
-    // =========================================================
-
-    async function handleRemoverCategoria(
-        id_categoria: number
-    ) {
-
-        // Validação do ID antes de enviar
-        // para a API
+    async function handleRemoverCategoria(id_categoria: number) {
         if (
-            !Number.isInteger(
-                id_categoria
-            ) ||
+            !Number.isInteger(id_categoria) ||
             id_categoria <= 0
         ) {
-
-            alert(
-                "ID da categoria inválido."
-            );
-
+            alert("ID da categoria inválido.");
             return;
         }
 
-        const confirmar =
-            window.confirm(
-                "Você realmente deseja remover esta categoria?"
-            );
+        const confirmar = window.confirm(
+            "Você realmente deseja remover esta categoria?"
+        );
 
         if (!confirmar) {
             return;
         }
 
         try {
+            await CategoriaRequests.removerCategoria(id_categoria);
 
-            await CategoriaRequests.removerCategoria(
-                id_categoria
+            setCategorias((categoriasAtuais) =>
+                categoriasAtuais.filter(
+                    (categoria) =>
+                        categoria.id_categoria !== id_categoria
+                )
             );
 
-            // Remove a categoria da tela
-            // sem precisar recarregar a página
-            setCategorias(
-                (categoriasAtuais) =>
-                    categoriasAtuais.filter(
-                        (categoria) =>
-                            categoria.id_categoria !==
-                            id_categoria
-                    )
-            );
-
-            alert(
-                "Categoria removida com sucesso."
-            );
-
+            alert("Categoria removida com sucesso.");
         } catch (error) {
-
-            console.error(
-                "Erro ao remover categoria:",
-                error
-            );
+            console.error("Erro ao remover categoria:", error);
 
             const mensagem =
                 error instanceof Error
@@ -353,81 +194,46 @@ function ListagemCategorias() {
         }
     }
 
-    // =========================================================
-    // RENDERIZAÇÃO
-    // =========================================================
-
     return (
-        <main className="min-h-screen flex-1 bg-black px-4 py-6 sm:px-6 lg:px-8">
-
+        <main className="min-h-screen flex-1 bg-pink-50 px-4 py-6 sm:px-6 lg:px-8">
             <div className="mx-auto w-full max-w-[1500px]">
 
-                {/* =====================================================
-                    CABEÇALHO
-                ====================================================== */}
-
                 <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-
                     <div>
-
                         <div className="mb-1 flex items-center gap-2">
-
-                            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-950 text-teal-400">
-
+                            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-pink-100 text-pink-700">
                                 <i className="pi pi-tags"></i>
-
                             </span>
 
-                            <h1 className="text-2xl font-bold tracking-tight text-teal-400 sm:text-3xl">
-
+                            <h1 className="text-2xl font-bold tracking-tight text-pink-800 sm:text-3xl">
                                 Categorias
-
                             </h1>
-
                         </div>
 
-                        <p className="text-sm text-slate-400">
-
+                        <p className="text-sm text-pink-700">
                             Acompanhe as categorias cadastradas no sistema.
-
                         </p>
-
                     </div>
-
-                    {/* BOTÃO NOVA CATEGORIA */}
 
                     <button
                         type="button"
                         onClick={() =>
-                            navigate(
-                                "/cadastro/categoria"
-                            )
+                            navigate("/cadastro/categoria")
                         }
-                        className="inline-flex items-center justify-center gap-2 rounded-lg bg-teal-500 px-5 py-2.5 text-sm font-semibold text-black shadow-sm transition hover:bg-teal-400 hover:shadow-md active:scale-[0.98]"
+                        className="inline-flex items-center justify-center gap-2 rounded-lg bg-pink-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-pink-700 hover:shadow-md active:scale-[0.98]"
                     >
-
                         <span className="text-lg leading-none">
                             +
                         </span>
 
                         Nova Categoria
-
                     </button>
-
                 </div>
 
-                {/* =====================================================
-                    BUSCA
-                ====================================================== */}
-
-                <div className="mb-5 rounded-xl border border-teal-900 bg-zinc-950 p-4 shadow-sm">
-
+                <div className="mb-5 rounded-xl border border-pink-200 bg-white p-4 shadow-sm">
                     <div className="relative">
-
-                        <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-teal-500">
-
+                        <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-pink-600">
                             <i className="pi pi-search"></i>
-
                         </span>
 
                         <input
@@ -438,87 +244,52 @@ function ListagemCategorias() {
                             onChange={handleBusca}
                             maxLength={100}
                             placeholder="Buscar por nome ou ID da categoria..."
-                            className="w-full rounded-lg border border-zinc-800 bg-black py-3 pl-11 pr-10 text-sm text-slate-200 outline-none transition placeholder:text-slate-500 focus:border-teal-500 focus:ring-2 focus:ring-teal-900"
+                            className="w-full rounded-lg border border-pink-200 bg-pink-50 py-3 pl-11 pr-10 text-sm text-pink-900 outline-none transition placeholder:text-pink-400 focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
                         />
 
                         {busca.length > 0 && (
-
                             <button
                                 type="button"
                                 onClick={() => {
-
                                     setBusca("");
-
                                     setCurrentPage(1);
-
                                 }}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-sm text-slate-400 transition hover:bg-teal-950 hover:text-teal-400"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-sm text-pink-400 transition hover:bg-pink-100 hover:text-pink-700"
                             >
-
                                 <i className="pi pi-times"></i>
-
                             </button>
-
                         )}
-
                     </div>
-
                 </div>
 
-                {/* =====================================================
-                    TABELA
-                ====================================================== */}
+                <div className="overflow-hidden rounded-xl border border-pink-200 bg-white shadow-sm">
 
-                <div className="overflow-hidden rounded-xl border border-teal-900 bg-zinc-950 shadow-sm">
-
-                    {/* CABEÇALHO DA TABELA */}
-
-                    <div className="flex flex-col gap-2 border-b border-teal-900 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-
+                    <div className="flex flex-col gap-2 border-b border-pink-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-
-                            <h2 className="font-semibold text-teal-400">
-
+                            <h2 className="font-semibold text-pink-800">
                                 Lista de categorias
-
                             </h2>
 
-                            <p className="text-xs text-slate-400">
-
+                            <p className="text-xs text-pink-600">
                                 {categoriasFiltradas.length}{" "}
-
                                 {categoriasFiltradas.length === 1
                                     ? "categoria encontrada"
                                     : "categorias encontradas"}
-
                             </p>
-
                         </div>
 
                         {busca && (
-
-                            <span className="rounded-full bg-teal-950 px-3 py-1 text-xs font-medium text-teal-400">
-
+                            <span className="rounded-full bg-pink-100 px-3 py-1 text-xs font-medium text-pink-700">
                                 Busca: "{busca}"
-
                             </span>
-
                         )}
-
                     </div>
 
-                    {/* ÁREA DA TABELA */}
-
                     <div className="overflow-x-auto">
-
                         <table className="w-full min-w-[600px] text-left text-sm">
 
-                            {/* CABEÇALHO */}
-
-                            <thead className="bg-teal-500 text-xs uppercase tracking-wide text-black">
-
+                            <thead className="bg-pink-700 text-xs uppercase tracking-wide text-white">
                                 <tr>
-
                                     <th className="px-5 py-4">
                                         ID
                                     </th>
@@ -530,92 +301,55 @@ function ListagemCategorias() {
                                     <th className="px-5 py-4 text-center">
                                         Ações
                                     </th>
-
                                 </tr>
-
                             </thead>
 
-                            <tbody className="divide-y divide-zinc-800">
-
-                                {/* =================================================
-                                    CARREGANDO
-                                ================================================== */}
+                            <tbody className="divide-y divide-pink-100">
 
                                 {carregando && (
-
                                     <tr>
-
                                         <td
                                             colSpan={3}
                                             className="px-5 py-14 text-center"
                                         >
-
-                                            <div className="flex flex-col items-center gap-3 text-slate-400">
-
-                                                <div className="h-8 w-8 animate-spin rounded-full border-4 border-teal-950 border-t-teal-400"></div>
+                                            <div className="flex flex-col items-center gap-3 text-pink-600">
+                                                <div className="h-8 w-8 animate-spin rounded-full border-4 border-pink-100 border-t-pink-600"></div>
 
                                                 <span className="text-sm">
-
                                                     Carregando categorias...
-
                                                 </span>
-
                                             </div>
-
                                         </td>
-
                                     </tr>
-
                                 )}
-
-                                {/* =================================================
-                                    LISTA DE CATEGORIAS
-                                ================================================== */}
 
                                 {!carregando &&
                                     currentCategorias.length > 0 &&
                                     currentCategorias.map(
                                         (categoria) => (
-
                                             <tr
                                                 key={
                                                     categoria.id_categoria
                                                 }
-                                                className="group transition-colors hover:bg-teal-950/40"
+                                                className="group transition-colors hover:bg-pink-50"
                                             >
-
-                                                {/* ID */}
-
-                                                <td className="px-5 py-4 font-medium text-slate-500">
-
+                                                <td className="px-5 py-4 font-medium text-pink-500">
                                                     #
                                                     {
                                                         categoria.id_categoria
                                                     }
-
                                                 </td>
 
-                                                {/* NOME */}
-
                                                 <td className="px-5 py-4">
-
-                                                    <span className="font-medium text-slate-200">
-
+                                                    <span className="font-medium text-pink-900">
                                                         {
                                                             categoria.nome
                                                         }
-
                                                     </span>
-
                                                 </td>
 
-                                                {/* AÇÕES */}
-
                                                 <td className="px-5 py-4">
-
                                                     <div className="flex items-center justify-center gap-2">
-
-                                                        {/* DETALHES */}
 
                                                         <button
                                                             type="button"
@@ -624,14 +358,10 @@ function ListagemCategorias() {
                                                                     `/detalhes/categoria/${categoria.id_categoria}`
                                                                 )
                                                             }
-                                                            className="rounded-lg bg-teal-950 px-3 py-2 text-xs font-semibold text-teal-400 transition hover:bg-teal-500 hover:text-black"
+                                                            className="rounded-lg bg-pink-100 px-3 py-2 text-xs font-semibold text-pink-700 transition hover:bg-pink-600 hover:text-white"
                                                         >
-
                                                             Detalhes
-
                                                         </button>
-
-                                                        {/* EDITAR */}
 
                                                         <button
                                                             type="button"
@@ -640,14 +370,10 @@ function ListagemCategorias() {
                                                                     `/atualizar/categoria/${categoria.id_categoria}`
                                                                 )
                                                             }
-                                                            className="rounded-lg bg-emerald-950 px-3 py-2 text-xs font-semibold text-emerald-400 transition hover:bg-emerald-500 hover:text-black"
+                                                            className="rounded-lg bg-rose-100 px-3 py-2 text-xs font-semibold text-rose-700 transition hover:bg-rose-600 hover:text-white"
                                                         >
-
                                                             Editar
-
                                                         </button>
-
-                                                        {/* EXCLUIR */}
 
                                                         <button
                                                             type="button"
@@ -656,116 +382,79 @@ function ListagemCategorias() {
                                                                     categoria.id_categoria
                                                                 )
                                                             }
-                                                            className="rounded-lg bg-red-950 px-3 py-2 text-xs font-semibold text-red-400 transition hover:bg-red-500 hover:text-black"
+                                                            className="rounded-lg bg-red-50 px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-600 hover:text-white"
                                                         >
-
                                                             Excluir
-
                                                         </button>
 
                                                     </div>
-
                                                 </td>
-
                                             </tr>
-
                                         )
                                     )}
 
-                                {/* =================================================
-                                    NENHUMA CATEGORIA
-                                ================================================== */}
-
                                 {!carregando &&
                                     currentCategorias.length === 0 && (
-
                                         <tr>
-
                                             <td
                                                 colSpan={3}
                                                 className="px-5 py-16 text-center"
                                             >
-
                                                 <div className="flex flex-col items-center">
 
-                                                    <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-teal-950 text-xl text-teal-400">
-
+                                                    <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-pink-100 text-xl text-pink-600">
                                                         <i className="pi pi-tags"></i>
-
                                                     </div>
 
-                                                    <h3 className="font-semibold text-teal-400">
-
+                                                    <h3 className="font-semibold text-pink-800">
                                                         Nenhuma categoria encontrada
-
                                                     </h3>
 
-                                                    <p className="mt-1 text-sm text-slate-500">
-
+                                                    <p className="mt-1 text-sm text-pink-500">
                                                         {busca
                                                             ? "Tente pesquisar por outro nome ou ID."
                                                             : "Ainda não existem categorias cadastradas."}
-
                                                     </p>
 
                                                 </div>
-
                                             </td>
-
                                         </tr>
-
                                     )}
 
                             </tbody>
-
                         </table>
-
                     </div>
 
-                    {/* =====================================================
-                        PAGINAÇÃO
-                    ====================================================== */}
+                    <div className="flex flex-col gap-4 border-t border-pink-100 bg-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
 
-                    <div className="flex flex-col gap-4 border-t border-teal-900 bg-zinc-950 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-
-                        <p className="text-sm text-slate-400">
-
+                        <p className="text-sm text-pink-600">
                             Mostrando{" "}
 
-                            <span className="font-semibold text-teal-400">
-
+                            <span className="font-semibold text-pink-800">
                                 {categoriasFiltradas.length > 0
                                     ? indexOfFirstRow + 1
                                     : 0}
-
                             </span>{" "}
 
                             até{" "}
 
-                            <span className="font-semibold text-teal-400">
-
+                            <span className="font-semibold text-pink-800">
                                 {Math.min(
                                     indexOfLastRow,
                                     categoriasFiltradas.length
                                 )}
-
                             </span>{" "}
 
                             de{" "}
 
-                            <span className="font-semibold text-teal-400">
-
+                            <span className="font-semibold text-pink-800">
                                 {categoriasFiltradas.length}
-
                             </span>{" "}
 
                             resultados
-
                         </p>
 
                         <div className="flex items-center gap-1">
-
-                            {/* VOLTAR */}
 
                             <button
                                 type="button"
@@ -774,51 +463,33 @@ function ListagemCategorias() {
                                         currentPage - 1
                                     )
                                 }
-                                disabled={
-                                    currentPage === 1
-                                }
-                                className="rounded-lg border border-zinc-800 bg-black px-3 py-2 text-sm text-teal-400 transition hover:bg-teal-950 disabled:cursor-not-allowed disabled:opacity-40"
+                                disabled={currentPage === 1}
+                                className="rounded-lg border border-pink-200 bg-white px-3 py-2 text-sm text-pink-600 transition hover:bg-pink-50 disabled:cursor-not-allowed disabled:opacity-40"
                             >
-
                                 <i className="pi pi-chevron-left"></i>
-
                             </button>
-
-                            {/* NÚMEROS */}
 
                             {Array.from(
                                 {
                                     length: totalPages,
                                 },
-                                (_, index) =>
-                                    index + 1
-                            ).map(
-                                (page) => (
-
-                                    <button
-                                        type="button"
-                                        key={page}
-                                        onClick={() =>
-                                            mudarPagina(
-                                                page
-                                            )
-                                        }
-                                        className={`min-w-9 rounded-lg px-3 py-2 text-sm font-medium transition ${
-                                            currentPage ===
-                                            page
-                                                ? "bg-teal-500 text-black shadow-sm"
-                                                : "border border-zinc-800 bg-black text-teal-400 hover:bg-teal-950"
-                                        }`}
-                                    >
-
-                                        {page}
-
-                                    </button>
-
-                                )
-                            )}
-
-                            {/* AVANÇAR */}
+                                (_, index) => index + 1
+                            ).map((page) => (
+                                <button
+                                    type="button"
+                                    key={page}
+                                    onClick={() =>
+                                        mudarPagina(page)
+                                    }
+                                    className={`min-w-9 rounded-lg px-3 py-2 text-sm font-medium transition ${
+                                        currentPage === page
+                                            ? "bg-pink-600 text-white shadow-sm"
+                                            : "border border-pink-200 bg-white text-pink-600 hover:bg-pink-50"
+                                    }`}
+                                >
+                                    {page}
+                                </button>
+                            ))}
 
                             <button
                                 type="button"
@@ -828,24 +499,17 @@ function ListagemCategorias() {
                                     )
                                 }
                                 disabled={
-                                    currentPage ===
-                                    totalPages
+                                    currentPage === totalPages
                                 }
-                                className="rounded-lg border border-zinc-800 bg-black px-3 py-2 text-sm text-teal-400 transition hover:bg-teal-950 disabled:cursor-not-allowed disabled:opacity-40"
+                                className="rounded-lg border border-pink-200 bg-white px-3 py-2 text-sm text-pink-600 transition hover:bg-pink-50 disabled:cursor-not-allowed disabled:opacity-40"
                             >
-
                                 <i className="pi pi-chevron-right"></i>
-
                             </button>
 
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </main>
     );
 }
