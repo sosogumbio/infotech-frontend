@@ -16,7 +16,7 @@ import PDetalhesProduto from "./pages/PDetalhesProduto/PDetalhesProduto";
 import PListagemCategoria from "./pages/PListagemCategorias/PListagemCategorias";
 import PDetalhesCategoria from "./pages/PDetalhesCategoria/PDetalhesCategoria";
 import PAtualizarCategoria from "./pages/PAtualizar/PAtualizarCategoria/PAtualizarCategoria";
-import PListagemMovimentacao from "./pages/PListagemMovimetacao/PListagemMovimentacao";
+import PListagemMovimentacao from "./pages/PListagemMovimentacoes/PListagemMovimentacoes";
 import PDetalhesMovimentacao from "./pages/PDetalhesMovimentacao/PDetalhesMovimentacao";
 import PAtualizarMovimentacao from "./pages/PAtualizar/PAtualizarMovimentacao/PAtualizarMovimentacao";
 

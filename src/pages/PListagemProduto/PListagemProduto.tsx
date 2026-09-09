@@ -12,7 +12,7 @@ function PListagemProduto(): JSX.Element {
 
             <Rodape />
         </div>
-    );                   
+    );
 }
 
 export default PListagemProduto;
