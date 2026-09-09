@@ -436,7 +436,7 @@ function ListagemProdutos(): JSX.Element {
                                                                     produto.id_produto
                                                                 )
                                                             }
-                                                            className="rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-600 hover:text-white"
+                                                            className="rounded-lg bg-pink-300 px-3 py-2 text-sm font-medium text-pink-900 transition hover:bg-pink-800 hover:text-white"
                                                         >
                                                             Excluir
                                                         </button>
