@@ -4,14 +4,22 @@ class AuthRequests {
 
     private serverUrl: string;
     private endpointLogin: string;
-    private endpointProduto: string;
 
+    /**
+     * Construtor das rotas e do endereço do servidor
+     */
     constructor() {
+        // endereço do servidor
         this.serverUrl = API_URL;
+        // rota do servidor
         this.endpointLogin = '/api/login';
-        this.endpointProduto = '/api/produtos'; // ajuste se sua rota for diferente
     }
 
+    /**
+     * Realiza a autenticação no servidor
+     * @param {*} login - email e senha
+     * @returns **true** caso sucesso, **false** caso erro
+     */
     async login(login: { email: string, senha: string }) {
         try {
             const response = await fetch(`${this.serverUrl}${this.endpointLogin}`, {
@@ -45,39 +53,13 @@ class AuthRequests {
         }
     }
 
-    async enviarFormularioProduto(formData: FormData) {
-        try {
-            const token = localStorage.getItem('token');
 
-            const response = await fetch(`${this.serverUrl}${this.endpointProduto}`, {
-                method: 'POST',
-                headers: {
-                    // Não definir 'Content-Type' aqui: o browser define
-                    // automaticamente o boundary correto pra multipart/form-data
-                    ...(token ? { Authorization: `Bearer ${token}` } : {})
-                },
-                body: formData
-            });
-
-            console.log('STATUS:', response.status);
-            console.log('URL:', response.url);
-
-            const data = await response.json();
-
-            console.log('RESPOSTA DO BACKEND:', data);
-
-            if (!response.ok) {
-                throw new Error(data.message || 'Falha ao enviar produto');
-            }
-
-            return data;
-
-        } catch (error) {
-            console.error('Erro:', error);
-            throw error;
-        }
-    }
-
+    /**
+     * Persiste o token no localStorage
+     * @param {*} token - token recebido do servidor
+     * @param {*} usuario - objeto com informações do usuário vindos do servidor
+     * @param {*} isAuth - estado da autenticação do usuário
+     */
     persistToken(token: string, usuario: { id_usuario: number, nome: string, email: string, role: string }, isAuth: boolean) {
         localStorage.setItem('token', token);
         localStorage.setItem('nome', usuario.nome);
@@ -87,6 +69,9 @@ class AuthRequests {
         localStorage.setItem('isAuth', isAuth.toString());
     }
 
+    /**
+     * Remove as informações do localStorage
+     */
     removeToken() {
         const keys = [
             'token',
@@ -101,22 +86,34 @@ class AuthRequests {
         window.location.href = `/login`;
     }
 
+    /**
+     * Verifica a validade do token
+     * @returns **true** caso token válido, **false** caso token inválido
+     */
     checkTokenExpiry() {
+        // recupera o valor do token no localstorage
         const token = localStorage.getItem('token');
 
+        // verifica se o valor é diferente de vazio
         if (token) {
+            // recupera a data de expiração do token
             const payload = JSON.parse(atob(token.split('.')[1]));
+            // recuepra a hora de expiração do token
             const expiry = payload.exp;
+            // pega a data e hora atual
             const now = Math.floor(Date.now() / 1000);
 
+            // verifica se o token está expirado
             if (expiry < now) {
+                // invoca a função para remover o token do localstorage
                 this.removeToken();
+                // retorna false
                 return false;
             }
-
+            // caso o token não esteja expirado, retorna true
             return true;
         }
-
+        // caso o token esteja vazio, retorna false
         return false;
     }
 }

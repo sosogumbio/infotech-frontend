@@ -1,6 +1,6 @@
 import { type JSX } from "react";
 import Navegacao from "../../componentes/Navegacao/Navegacao";
-import ListagemProduto from "../../componentes/Listagens/ListagemProduto";
+import ListagemProdutos from "../../componentes/Listagens/ListagemProduto";
 import Rodape from "../../componentes/Rodape/Rodape";
 
 function PListagemProduto(): JSX.Element {
@@ -8,7 +8,7 @@ function PListagemProduto(): JSX.Element {
         <div className="flex min-h-screen flex-col bg-slate-100">
             <Navegacao />
 
-            <ListagemProduto />
+            <ListagemProdutos />
 
             <Rodape />
         </div>
