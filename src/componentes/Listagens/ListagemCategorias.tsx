@@ -62,31 +62,46 @@ function ListagemCategorias() {
                 const resposta =
                     await CategoriaRequests.obterListaDeCategorias();
 
-                console.log("Categorias recebidas da API:", resposta);
+                console.log(
+                    "Categorias recebidas da API:",
+                    resposta
+                );
 
                 if (!Array.isArray(resposta)) {
-                    console.error("A API retornou um formato inválido.");
+                    console.error(
+                        "A API retornou um formato inválido."
+                    );
+
                     setCategorias([]);
                     return;
                 }
 
-                const categoriasValidas = resposta.filter((categoria) =>
-                    validarCategoria(categoria)
-                );
+                const categoriasValidas =
+                    resposta.filter((categoria) =>
+                        validarCategoria(categoria)
+                    );
 
                 setCategorias(categoriasValidas);
 
-                if (categoriasValidas.length !== resposta.length) {
+                if (
+                    categoriasValidas.length !==
+                    resposta.length
+                ) {
                     console.warn(
                         "Algumas categorias foram ignoradas porque possuem dados inválidos."
                     );
                 }
             } catch (error) {
-                console.error("Erro ao buscar categorias:", error);
+                console.error(
+                    "Erro ao buscar categorias:",
+                    error
+                );
 
                 setCategorias([]);
 
-                alert("Não foi possível carregar as categorias.");
+                alert(
+                    "Não foi possível carregar as categorias."
+                );
             } finally {
                 setCarregando(false);
             }
@@ -95,31 +110,47 @@ function ListagemCategorias() {
         buscarCategorias();
     }, []);
 
-    const termoBusca = busca.trim().toLowerCase();
+    const termoBusca =
+        busca.trim().toLowerCase();
 
-    const categoriasFiltradas = categorias.filter((categoria) => {
-        if (!termoBusca) {
-            return true;
-        }
+    const categoriasFiltradas =
+        categorias.filter((categoria) => {
+            if (!termoBusca) {
+                return true;
+            }
 
-        const nome = categoria.nome?.toLowerCase() ?? "";
-        const id = String(categoria.id_categoria);
+            const nome =
+                categoria.nome?.toLowerCase() ?? "";
 
-        return nome.includes(termoBusca) || id.includes(termoBusca);
-    });
+            const id = String(
+                categoria.id_categoria
+            );
+
+            return (
+                nome.includes(termoBusca) ||
+                id.includes(termoBusca)
+            );
+        });
 
     const totalPages = Math.max(
         1,
-        Math.ceil(categoriasFiltradas.length / rowsPerPage)
+        Math.ceil(
+            categoriasFiltradas.length /
+                rowsPerPage
+        )
     );
 
-    const indexOfFirstRow = (currentPage - 1) * rowsPerPage;
-    const indexOfLastRow = indexOfFirstRow + rowsPerPage;
+    const indexOfFirstRow =
+        (currentPage - 1) * rowsPerPage;
 
-    const currentCategorias = categoriasFiltradas.slice(
-        indexOfFirstRow,
-        indexOfLastRow
-    );
+    const indexOfLastRow =
+        indexOfFirstRow + rowsPerPage;
+
+    const currentCategorias =
+        categoriasFiltradas.slice(
+            indexOfFirstRow,
+            indexOfLastRow
+        );
 
     useEffect(() => {
         if (currentPage > totalPages) {
@@ -144,7 +175,8 @@ function ListagemCategorias() {
     function handleBusca(
         event: React.ChangeEvent<HTMLInputElement>
     ) {
-        const valor = event.target.value;
+        const valor =
+            event.target.value;
 
         if (valor.length > 100) {
             return;
@@ -154,36 +186,51 @@ function ListagemCategorias() {
         setCurrentPage(1);
     }
 
-    async function handleRemoverCategoria(id_categoria: number) {
+    async function handleRemoverCategoria(
+        id_categoria: number
+    ) {
         if (
             !Number.isInteger(id_categoria) ||
             id_categoria <= 0
         ) {
-            alert("ID da categoria inválido.");
+            alert(
+                "ID da categoria inválido."
+            );
+
             return;
         }
 
-        const confirmar = window.confirm(
-            "Você realmente deseja remover esta categoria?"
-        );
+        const confirmar =
+            window.confirm(
+                "Você realmente deseja remover esta categoria?"
+            );
 
         if (!confirmar) {
             return;
         }
 
         try {
-            await CategoriaRequests.removerCategoria(id_categoria);
-
-            setCategorias((categoriasAtuais) =>
-                categoriasAtuais.filter(
-                    (categoria) =>
-                        categoria.id_categoria !== id_categoria
-                )
+            await CategoriaRequests.removerCategoria(
+                id_categoria
             );
 
-            alert("Categoria removida com sucesso.");
+            setCategorias(
+                (categoriasAtuais) =>
+                    categoriasAtuais.filter(
+                        (categoria) =>
+                            categoria.id_categoria !==
+                            id_categoria
+                    )
+            );
+
+            alert(
+                "Categoria removida com sucesso."
+            );
         } catch (error) {
-            console.error("Erro ao remover categoria:", error);
+            console.error(
+                "Erro ao remover categoria:",
+                error
+            );
 
             const mensagem =
                 error instanceof Error
@@ -196,11 +243,15 @@ function ListagemCategorias() {
 
     return (
         <main className="min-h-screen flex-1 bg-pink-50 px-4 py-6 sm:px-6 lg:px-8">
+
             <div className="mx-auto w-full max-w-[1500px]">
 
                 <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
                     <div>
+
                         <div className="mb-1 flex items-center gap-2">
+
                             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-pink-100 text-pink-700">
                                 <i className="pi pi-tags"></i>
                             </span>
@@ -208,17 +259,21 @@ function ListagemCategorias() {
                             <h1 className="text-2xl font-bold tracking-tight text-pink-800 sm:text-3xl">
                                 Categorias
                             </h1>
+
                         </div>
 
                         <p className="text-sm text-pink-700">
                             Acompanhe as categorias cadastradas no sistema.
                         </p>
+
                     </div>
 
                     <button
                         type="button"
                         onClick={() =>
-                            navigate("/cadastro/categoria")
+                            navigate(
+                                "/cadastro/categoria"
+                            )
                         }
                         className="inline-flex items-center justify-center gap-2 rounded-lg bg-pink-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-pink-700 hover:shadow-md active:scale-[0.98]"
                     >
@@ -228,10 +283,13 @@ function ListagemCategorias() {
 
                         Nova Categoria
                     </button>
+
                 </div>
 
                 <div className="mb-5 rounded-xl border border-pink-200 bg-white p-4 shadow-sm">
+
                     <div className="relative">
+
                         <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-pink-600">
                             <i className="pi pi-search"></i>
                         </span>
@@ -259,23 +317,33 @@ function ListagemCategorias() {
                                 <i className="pi pi-times"></i>
                             </button>
                         )}
+
                     </div>
+
                 </div>
 
                 <div className="overflow-hidden rounded-xl border border-pink-200 bg-white shadow-sm">
 
                     <div className="flex flex-col gap-2 border-b border-pink-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+
                         <div>
+
                             <h2 className="font-semibold text-pink-800">
                                 Lista de categorias
                             </h2>
 
                             <p className="text-xs text-pink-600">
-                                {categoriasFiltradas.length}{" "}
-                                {categoriasFiltradas.length === 1
-                                    ? "categoria encontrada"
-                                    : "categorias encontradas"}
+                                {
+                                    categoriasFiltradas.length
+                                }{" "}
+                                {
+                                    categoriasFiltradas.length ===
+                                    1
+                                        ? "categoria encontrada"
+                                        : "categorias encontradas"
+                                }
                             </p>
+
                         </div>
 
                         {busca && (
@@ -283,13 +351,17 @@ function ListagemCategorias() {
                                 Busca: "{busca}"
                             </span>
                         )}
+
                     </div>
 
                     <div className="overflow-x-auto">
+
                         <table className="w-full min-w-[600px] text-left text-sm">
 
                             <thead className="bg-pink-700 text-xs uppercase tracking-wide text-white">
+
                                 <tr>
+
                                     <th className="px-5 py-4">
                                         ID
                                     </th>
@@ -301,39 +373,50 @@ function ListagemCategorias() {
                                     <th className="px-5 py-4 text-center">
                                         Ações
                                     </th>
+
                                 </tr>
+
                             </thead>
 
                             <tbody className="divide-y divide-pink-100">
 
                                 {carregando && (
                                     <tr>
+
                                         <td
                                             colSpan={3}
                                             className="px-5 py-14 text-center"
                                         >
+
                                             <div className="flex flex-col items-center gap-3 text-pink-600">
+
                                                 <div className="h-8 w-8 animate-spin rounded-full border-4 border-pink-100 border-t-pink-600"></div>
 
                                                 <span className="text-sm">
                                                     Carregando categorias...
                                                 </span>
+
                                             </div>
+
                                         </td>
+
                                     </tr>
                                 )}
 
                                 {!carregando &&
-                                    currentCategorias.length > 0 &&
+                                    currentCategorias.length >
+                                        0 &&
                                     currentCategorias.map(
                                         (categoria) => (
+
                                             <tr
                                                 key={
                                                     categoria.id_categoria
                                                 }
                                                 className="group transition-colors hover:bg-pink-50"
                                             >
-                                                <td className="px-5 py-4 font-medium text-pink-500">
+
+                                                <td className="px-5 py-4 font-medium text-pink-400">
                                                     #
                                                     {
                                                         categoria.id_categoria
@@ -341,14 +424,17 @@ function ListagemCategorias() {
                                                 </td>
 
                                                 <td className="px-5 py-4">
+
                                                     <span className="font-medium text-pink-900">
                                                         {
                                                             categoria.nome
                                                         }
                                                     </span>
+
                                                 </td>
 
                                                 <td className="px-5 py-4">
+
                                                     <div className="flex items-center justify-center gap-2">
 
                                                         <button
@@ -382,24 +468,30 @@ function ListagemCategorias() {
                                                                     categoria.id_categoria
                                                                 )
                                                             }
-                                                            className="rounded-lg bg-red-50 px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-600 hover:text-white"
+                                                            className="rounded-lg bg-pink-300 px-3 py-2 text-xs font-semibold text-pink-900 transition hover:bg-pink-800 hover:text-white"
                                                         >
                                                             Excluir
                                                         </button>
 
                                                     </div>
+
                                                 </td>
+
                                             </tr>
                                         )
                                     )}
 
                                 {!carregando &&
-                                    currentCategorias.length === 0 && (
+                                    currentCategorias.length ===
+                                        0 && (
+
                                         <tr>
+
                                             <td
                                                 colSpan={3}
                                                 className="px-5 py-16 text-center"
                                             >
+
                                                 <div className="flex flex-col items-center">
 
                                                     <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-pink-100 text-xl text-pink-600">
@@ -417,21 +509,27 @@ function ListagemCategorias() {
                                                     </p>
 
                                                 </div>
+
                                             </td>
+
                                         </tr>
                                     )}
 
                             </tbody>
+
                         </table>
+
                     </div>
 
                     <div className="flex flex-col gap-4 border-t border-pink-100 bg-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
 
                         <p className="text-sm text-pink-600">
+
                             Mostrando{" "}
 
                             <span className="font-semibold text-pink-800">
-                                {categoriasFiltradas.length > 0
+                                {categoriasFiltradas.length >
+                                0
                                     ? indexOfFirstRow + 1
                                     : 0}
                             </span>{" "}
@@ -448,10 +546,13 @@ function ListagemCategorias() {
                             de{" "}
 
                             <span className="font-semibold text-pink-800">
-                                {categoriasFiltradas.length}
+                                {
+                                    categoriasFiltradas.length
+                                }
                             </span>{" "}
 
                             resultados
+
                         </p>
 
                         <div className="flex items-center gap-1">
@@ -463,7 +564,9 @@ function ListagemCategorias() {
                                         currentPage - 1
                                     )
                                 }
-                                disabled={currentPage === 1}
+                                disabled={
+                                    currentPage === 1
+                                }
                                 className="rounded-lg border border-pink-200 bg-white px-3 py-2 text-sm text-pink-600 transition hover:bg-pink-50 disabled:cursor-not-allowed disabled:opacity-40"
                             >
                                 <i className="pi pi-chevron-left"></i>
@@ -473,8 +576,10 @@ function ListagemCategorias() {
                                 {
                                     length: totalPages,
                                 },
-                                (_, index) => index + 1
+                                (_, index) =>
+                                    index + 1
                             ).map((page) => (
+
                                 <button
                                     type="button"
                                     key={page}
@@ -482,13 +587,15 @@ function ListagemCategorias() {
                                         mudarPagina(page)
                                     }
                                     className={`min-w-9 rounded-lg px-3 py-2 text-sm font-medium transition ${
-                                        currentPage === page
+                                        currentPage ===
+                                        page
                                             ? "bg-pink-600 text-white shadow-sm"
                                             : "border border-pink-200 bg-white text-pink-600 hover:bg-pink-50"
                                     }`}
                                 >
                                     {page}
                                 </button>
+
                             ))}
 
                             <button
@@ -499,7 +606,8 @@ function ListagemCategorias() {
                                     )
                                 }
                                 disabled={
-                                    currentPage === totalPages
+                                    currentPage ===
+                                    totalPages
                                 }
                                 className="rounded-lg border border-pink-200 bg-white px-3 py-2 text-sm text-pink-600 transition hover:bg-pink-50 disabled:cursor-not-allowed disabled:opacity-40"
                             >
@@ -507,9 +615,13 @@ function ListagemCategorias() {
                             </button>
 
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </main>
     );
 }
