@@ -1,4 +1,4 @@
-import type { MovimentacaoDTO } from '../dto/MovimentacaoDTO';
+import type MovimentacaoDTO from "../dto/MovimentacaoDTO";
 
 const API_URL = import.meta.env.VITE_API_SERVER_URL;
 
@@ -12,7 +12,7 @@ class MovimentacaoRequests {
         this.endpointMovimentacao = '/api/movimentacoes';
     }
 
-    async obterListaDeMovimentacoes(): Promise<MovimentacaoDTO[]> {
+    async obterListaDeMovimentacoes() {
 
         try {
 
@@ -30,8 +30,7 @@ class MovimentacaoRequests {
 
             if (respostaAPI.ok) {
 
-                const listaDeMovimentacoes: MovimentacaoDTO[] =
-                    await respostaAPI.json();
+                const listaDeMovimentacoes = await respostaAPI.json();
 
                 return listaDeMovimentacoes;
 
@@ -49,7 +48,8 @@ class MovimentacaoRequests {
                 `Erro ao fazer a consulta de movimentações. ${error}`
             );
 
-            return [];
+            return;
+
         }
     }
 
@@ -94,6 +94,7 @@ class MovimentacaoRequests {
             );
 
             return;
+
         }
     }
 
@@ -121,11 +122,9 @@ class MovimentacaoRequests {
             );
 
             if (!respostaAPI.ok) {
-
                 throw new Error(
                     `Erro ${respostaAPI.status}: ${respostaAPI.statusText}`
                 );
-
             }
 
             console.info(
@@ -141,6 +140,7 @@ class MovimentacaoRequests {
             );
 
             return false;
+
         }
     }
 
@@ -169,11 +169,9 @@ class MovimentacaoRequests {
             );
 
             if (!respostaAPI.ok) {
-
                 throw new Error(
                     `Erro ${respostaAPI.status}: ${respostaAPI.statusText}`
                 );
-
             }
 
             console.info(
@@ -189,6 +187,7 @@ class MovimentacaoRequests {
             );
 
             return false;
+
         }
     }
 
@@ -239,8 +238,9 @@ class MovimentacaoRequests {
             );
 
             throw error;
+
         }
     }
 }
 
-export default new MovimentacaoRequests();
+export default new MovimentacaoRequests;
