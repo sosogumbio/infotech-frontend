@@ -53,18 +53,26 @@ function DetalhesProduto(): JSX.Element {
 
     if (carregando) {
         return (
-            <main className="flex flex-1 items-center justify-center bg-black">
-                <p className="text-lg text-teal-400">
-                    Carregando produto...
-                </p>
+            <main className="flex flex-1 items-center justify-center bg-pink-50">
+                <div className="flex flex-col items-center gap-3">
+                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-pink-100 border-t-pink-600"></div>
+
+                    <p className="text-lg font-medium text-pink-700">
+                        Carregando produto...
+                    </p>
+                </div>
             </main>
         );
     }
 
     if (!produto) {
         return (
-            <main className="flex flex-1 flex-col items-center justify-center gap-4 bg-black">
-                <p className="text-lg text-red-400">
+            <main className="flex flex-1 flex-col items-center justify-center gap-4 bg-pink-50">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-pink-100 text-xl text-pink-600">
+                    <i className="pi pi-box"></i>
+                </div>
+
+                <p className="text-lg font-semibold text-pink-800">
                     Produto não encontrado.
                 </p>
 
@@ -73,7 +81,7 @@ function DetalhesProduto(): JSX.Element {
                     onClick={() =>
                         navigate("/lista/produtos")
                     }
-                    className="rounded-lg bg-teal-500 px-5 py-2 font-medium text-black transition hover:bg-teal-400"
+                    className="rounded-lg bg-pink-600 px-5 py-2 font-medium text-white transition hover:bg-pink-700"
                 >
                     Voltar
                 </button>
@@ -82,60 +90,64 @@ function DetalhesProduto(): JSX.Element {
     }
 
     return (
-        <main className="flex-1 bg-black px-6 py-8">
-            <div className="mx-auto max-w-4xl">
+        <main className="flex-1 bg-pink-50 px-4 py-8 sm:px-6">
+            <div className="mx-auto w-full max-w-4xl">
 
                 {/* CABEÇALHO */}
                 <div className="mb-6">
+
                     <div className="mb-1 flex items-center gap-2">
-                        <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-teal-950 text-teal-400">
-                            <i className="pi pi-box" />
+
+                        <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-pink-100 text-pink-600">
+                            <i className="pi pi-box"></i>
                         </span>
 
-                        <h1 className="text-3xl font-bold text-teal-400">
+                        <h1 className="text-3xl font-bold tracking-tight text-pink-800">
                             Detalhes do Produto
                         </h1>
+
                     </div>
 
-                    <p className="mt-1 text-slate-400">
+                    <p className="mt-1 text-pink-600">
                         Visualize as informações do produto.
                     </p>
+
                 </div>
 
                 {/* CARD */}
-                <div className="rounded-xl border border-teal-900 bg-zinc-950 p-6 shadow-md">
+                <div className="rounded-xl border border-pink-200 bg-white p-6 shadow-sm">
 
                     <div className="grid gap-6 md:grid-cols-2">
 
                         {/* ID */}
                         <div>
-                            <p className="text-sm font-medium text-slate-500">
+                            <p className="text-sm font-medium text-pink-500">
                                 ID do Produto
                             </p>
 
-                            <p className="mt-1 text-lg font-semibold text-slate-200">
+                            <p className="mt-1 text-lg font-semibold text-pink-900">
                                 #{produto.id_produto}
                             </p>
                         </div>
 
                         {/* NOME */}
                         <div>
-                            <p className="text-sm font-medium text-slate-500">
+                            <p className="text-sm font-medium text-pink-500">
                                 Nome
                             </p>
 
-                            <p className="mt-1 text-lg font-semibold text-slate-200">
+                            <p className="mt-1 text-lg font-semibold text-pink-900">
                                 {produto.nome}
                             </p>
                         </div>
 
                         {/* CATEGORIA */}
                         <div>
-                            <p className="text-sm font-medium text-slate-500">
+                            <p className="text-sm font-medium text-pink-500">
                                 ID da Categoria
                             </p>
 
-                            <p className="mt-1 text-lg font-semibold text-slate-200">
+                            <p className="mt-1 text-lg font-semibold text-pink-900">
                                 #{produto.id_categoria}
                             </p>
                         </div>
@@ -143,15 +155,17 @@ function DetalhesProduto(): JSX.Element {
                     </div>
 
                     {/* DESCRIÇÃO */}
-                    <div className="mt-6 border-t border-zinc-800 pt-6">
-                        <p className="text-sm font-medium text-slate-500">
+                    <div className="mt-6 border-t border-pink-100 pt-6">
+
+                        <p className="text-sm font-medium text-pink-500">
                             Descrição
                         </p>
 
-                        <p className="mt-2 rounded-lg border border-zinc-800 bg-black p-4 text-slate-300">
+                        <p className="mt-2 rounded-lg border border-pink-200 bg-pink-50 p-4 text-pink-900">
                             {produto.descricao ||
                                 "Nenhuma descrição informada."}
                         </p>
+
                     </div>
 
                     {/* BOTÕES */}
@@ -164,12 +178,15 @@ function DetalhesProduto(): JSX.Element {
                                     "/lista/produtos"
                                 )
                             }
-                            className="rounded-lg bg-zinc-800 px-5 py-2 font-medium text-slate-300 transition hover:bg-zinc-700"
+                            className="rounded-lg bg-pink-300 px-5 py-2 font-medium text-pink-900 transition hover:bg-pink-800 hover:text-white"
                         >
                             Voltar
                         </button>
+
                     </div>
+
                 </div>
+
             </div>
         </main>
     );
