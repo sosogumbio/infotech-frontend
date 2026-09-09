@@ -4,7 +4,7 @@ import {
     type JSX,
     type ChangeEvent,
 } from "react";
-import type MovimentacaoDTO  from "../../dto/MovimentacaoDTO";
+import type MovimentacaoDTO from "../../dto/MovimentacaoDTO";
 import MovimentacaoRequests from "../../fetch/MovimentacaoRequest";
 import { useNavigate } from "react-router-dom";
 
@@ -25,8 +25,6 @@ function ListagemMovimentacoes(): JSX.Element {
                 const listaDeMovimentacoes =
                     await MovimentacaoRequests.obterListaDeMovimentacoes();
 
-                // Normaliza os dados recebidos da API para evitar
-                // valores undefined/NaN na tabela.
                 const movimentacoesNormalizadas: MovimentacaoDTO[] = (
                     listaDeMovimentacoes ?? []
                 ).map((movimentacao: MovimentacaoDTO) => {
@@ -38,7 +36,9 @@ function ListagemMovimentacoes(): JSX.Element {
                         valorTotal?: number | string | null;
                     };
 
-                    const motivo = String(item.motivo ?? "").trim();
+                    const motivo = String(
+                        item.motivo ?? ""
+                    ).trim();
 
                     const tipoRecebido = String(
                         item.tipo_movimentacao ??
@@ -52,9 +52,17 @@ function ListagemMovimentacoes(): JSX.Element {
                     let tipo = tipoRecebido;
 
                     if (!tipo) {
-                        if (/recebimento|entrada/i.test(motivo)) {
+                        if (
+                            /recebimento|entrada/i.test(
+                                motivo
+                            )
+                        ) {
                             tipo = "ENTRADA";
-                        } else if (/sa[ií]da|retirada/i.test(motivo)) {
+                        } else if (
+                            /sa[ií]da|retirada/i.test(
+                                motivo
+                            )
+                        ) {
                             tipo = "SAÍDA";
                         } else {
                             tipo = "—";
@@ -67,29 +75,38 @@ function ListagemMovimentacoes(): JSX.Element {
                             item.precoUnitario
                     );
 
-                    const precoUnitario = Number.isFinite(precoConvertido)
-                        ? precoConvertido
-                        : 0;
+                    const precoUnitario =
+                        Number.isFinite(precoConvertido)
+                            ? precoConvertido
+                            : 0;
 
                     const valorConvertido = Number(
-                        item.valor_total ?? item.valorTotal
+                        item.valor_total ??
+                            item.valorTotal
                     );
 
-                    const valorTotal = Number.isFinite(valorConvertido)
-                        ? valorConvertido
-                        : Number(item.quantidade ?? 0) * precoUnitario;
+                    const valorTotal =
+                        Number.isFinite(valorConvertido)
+                            ? valorConvertido
+                            : Number(
+                                  item.quantidade ?? 0
+                              ) * precoUnitario;
 
                     return {
                         ...movimentacao,
                         tipo_movimentacao: tipo,
                         preco_unitario: precoUnitario,
-                        valor_total: Number.isFinite(valorTotal)
+                        valor_total: Number.isFinite(
+                            valorTotal
+                        )
                             ? valorTotal
                             : 0,
                     };
                 });
 
-                setMovimentacoes(movimentacoesNormalizadas);
+                setMovimentacoes(
+                    movimentacoesNormalizadas
+                );
             } catch (error) {
                 console.error(
                     `Erro ao buscar movimentações. ${error}`
@@ -106,27 +123,37 @@ function ListagemMovimentacoes(): JSX.Element {
         buscarMovimentacoes();
     }, []);
 
-    /* FILTRO */
-    const movimentacoesFiltradas = movimentacoes.filter((movimentacao) => {
-        const termo = busca.toLowerCase().trim();
+    const movimentacoesFiltradas =
+        movimentacoes.filter((movimentacao) => {
+            const termo = busca
+                .toLowerCase()
+                .trim();
 
-        if (!termo) {
-            return true;
-        }
+            if (!termo) {
+                return true;
+            }
 
-        return (
-            movimentacao.motivo?.toLowerCase().includes(termo) ||
-            movimentacao.observacao?.toLowerCase().includes(termo) ||
-            movimentacao.tipo_movimentacao?.toLowerCase().includes(termo) ||
-            String(movimentacao.id_produto).includes(termo)
-        );
-    });
+            return (
+                movimentacao.motivo
+                    ?.toLowerCase()
+                    .includes(termo) ||
+                movimentacao.observacao
+                    ?.toLowerCase()
+                    .includes(termo) ||
+                movimentacao.tipo_movimentacao
+                    ?.toLowerCase()
+                    .includes(termo) ||
+                String(
+                    movimentacao.id_produto
+                ).includes(termo)
+            );
+        });
 
-    /* PAGINAÇÃO */
     const totalPages = Math.max(
         1,
         Math.ceil(
-            movimentacoesFiltradas.length / rowsPerPage
+            movimentacoesFiltradas.length /
+                rowsPerPage
         )
     );
 
@@ -151,7 +178,6 @@ function ListagemMovimentacoes(): JSX.Element {
         );
     };
 
-    /* BUSCA */
     const handleBusca = (
         event: ChangeEvent<HTMLInputElement>
     ) => {
@@ -159,7 +185,6 @@ function ListagemMovimentacoes(): JSX.Element {
         setCurrentPage(1);
     };
 
-    /* REMOVER */
     const handleRemoverMovimentacao = async (
         id_movimentacao: number
     ) => {
@@ -203,38 +228,60 @@ function ListagemMovimentacoes(): JSX.Element {
         }
     };
 
-    /* VALORES MONETÁRIOS */
-    const formatarValor = (valor: number | string | null | undefined) => {
+    const formatarValor = (
+        valor:
+            | number
+            | string
+            | null
+            | undefined
+    ) => {
         const numero = Number(valor);
 
         return new Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",
-        }).format(Number.isFinite(numero) ? numero : 0);
+        }).format(
+            Number.isFinite(numero)
+                ? numero
+                : 0
+        );
     };
 
-    /* DATA */
     const formatarData = (data: string) => {
-        const dataConvertida = new Date(data);
+        const dataConvertida =
+            new Date(data);
 
-        if (Number.isNaN(dataConvertida.getTime())) {
+        if (
+            Number.isNaN(
+                dataConvertida.getTime()
+            )
+        ) {
             return "—";
         }
 
-        return new Intl.DateTimeFormat("pt-BR", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-        }).format(dataConvertida);
+        return new Intl.DateTimeFormat(
+            "pt-BR",
+            {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+            }
+        ).format(dataConvertida);
     };
 
-    /* TIPO */
-    const isEntrada = (movimentacao: MovimentacaoDTO) => {
-        const tipo = movimentacao.tipo_movimentacao?.toUpperCase() ?? "";
+    const isEntrada = (
+        movimentacao: MovimentacaoDTO
+    ) => {
+        const tipo =
+            movimentacao.tipo_movimentacao
+                ?.toUpperCase() ?? "";
 
-        return tipo === "ENTRADA" || tipo === "RECEBIMENTO";
+        return (
+            tipo === "ENTRADA" ||
+            tipo === "RECEBIMENTO"
+        );
     };
 
     return (
@@ -242,7 +289,6 @@ function ListagemMovimentacoes(): JSX.Element {
 
             <div className="mx-auto w-full max-w-[1500px]">
 
-                {/* CABEÇALHO */}
                 <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
                     <div>
@@ -270,7 +316,7 @@ function ListagemMovimentacoes(): JSX.Element {
                                 "/cadastro/movimentacao"
                             )
                         }
-                        className="inline-flex items-center justify-center gap-2 rounded-lg bg-pink-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-pink-500 hover:shadow-md active:scale-[0.98]"
+                        className="inline-flex items-center justify-center gap-2 rounded-lg bg-pink-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-pink-700 hover:shadow-md active:scale-[0.98]"
                     >
                         <span className="text-lg leading-none">
                             +
@@ -281,12 +327,11 @@ function ListagemMovimentacoes(): JSX.Element {
 
                 </div>
 
-                {/* BUSCA */}
                 <div className="mb-5 rounded-xl border border-pink-200 bg-white p-4 shadow-sm">
 
                     <div className="relative">
 
-                        <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-pink-500">
+                        <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-pink-600">
                             <i className="pi pi-search" />
                         </span>
 
@@ -297,7 +342,7 @@ function ListagemMovimentacoes(): JSX.Element {
                             value={busca}
                             onChange={handleBusca}
                             placeholder="Buscar por produto, tipo, motivo ou observação..."
-                            className="w-full rounded-lg border border-pink-200 bg-white py-3 pl-11 pr-10 text-sm text-pink-900 outline-none transition placeholder:text-pink-400 focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
+                            className="w-full rounded-lg border border-pink-200 bg-pink-50 py-3 pl-11 pr-10 text-sm text-pink-900 outline-none transition placeholder:text-pink-400 focus:border-pink-500 focus:bg-white focus:ring-2 focus:ring-pink-200"
                         />
 
                         {busca && (
@@ -307,7 +352,7 @@ function ListagemMovimentacoes(): JSX.Element {
                                     setBusca("");
                                     setCurrentPage(1);
                                 }}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-sm text-pink-700 transition hover:bg-pink-100 hover:text-pink-600"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-sm text-pink-400 transition hover:bg-pink-100 hover:text-pink-700"
                             >
                                 <i className="pi pi-times" />
                             </button>
@@ -317,34 +362,36 @@ function ListagemMovimentacoes(): JSX.Element {
 
                 </div>
 
-                {/* TABELA */}
                 <div className="overflow-hidden rounded-xl border border-pink-200 bg-white shadow-sm">
 
-                    {/* CABEÇALHO DO CARD */}
-                    <div className="flex flex-col gap-2 border-b border-pink-200 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex flex-col gap-2 border-b border-pink-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
 
                         <div>
                             <h2 className="font-semibold text-pink-800">
                                 Lista de movimentações
                             </h2>
 
-                            <p className="text-xs text-pink-500">
-                                {movimentacoesFiltradas.length}{" "}
-                                {movimentacoesFiltradas.length === 1
-                                    ? "movimentação encontrada"
-                                    : "movimentações encontradas"}
+                            <p className="text-xs text-pink-600">
+                                {
+                                    movimentacoesFiltradas.length
+                                }{" "}
+                                {
+                                    movimentacoesFiltradas.length ===
+                                    1
+                                        ? "movimentação encontrada"
+                                        : "movimentações encontradas"
+                                }
                             </p>
                         </div>
 
                         {busca && (
-                            <span className="rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-pink-700">
+                            <span className="rounded-full bg-pink-100 px-3 py-1 text-xs font-medium text-pink-700">
                                 Busca: "{busca}"
                             </span>
                         )}
 
                     </div>
 
-                    {/* TABELA */}
                     <div className="overflow-x-auto">
 
                         <table className="w-full min-w-[1000px] text-left text-sm">
@@ -402,7 +449,7 @@ function ListagemMovimentacoes(): JSX.Element {
                                             colSpan={9}
                                             className="px-5 py-14 text-center"
                                         >
-                                            <div className="flex flex-col items-center gap-3 text-pink-500">
+                                            <div className="flex flex-col items-center gap-3 text-pink-600">
 
                                                 <div className="h-8 w-8 animate-spin rounded-full border-4 border-pink-100 border-t-pink-600" />
 
@@ -426,7 +473,6 @@ function ListagemMovimentacoes(): JSX.Element {
                                                 className="group transition-colors hover:bg-pink-50"
                                             >
 
-                                                {/* ID */}
                                                 <td className="px-5 py-4 font-medium text-pink-400">
                                                     #
                                                     {
@@ -434,10 +480,9 @@ function ListagemMovimentacoes(): JSX.Element {
                                                     }
                                                 </td>
 
-                                                {/* PRODUTO */}
                                                 <td className="px-5 py-4">
 
-                                                    <span className="rounded-md bg-purple-100 px-2.5 py-1 font-mono text-xs font-medium text-pink-700">
+                                                    <span className="rounded-md bg-pink-100 px-2.5 py-1 font-mono text-xs font-medium text-pink-700">
                                                         #
                                                         {
                                                             movimentacao.id_produto
@@ -446,16 +491,16 @@ function ListagemMovimentacoes(): JSX.Element {
 
                                                 </td>
 
-                                                {/* TIPO */}
                                                 <td className="px-5 py-4 text-center">
 
                                                     <span
-                                                        className={`inline-flex min-w-20 justify-center rounded-full px-2.5 py-1 text-xs font-bold ${isEntrada(
-                                                            movimentacao
-                                                        )
+                                                        className={`inline-flex min-w-20 justify-center rounded-full px-2.5 py-1 text-xs font-bold ${
+                                                            isEntrada(
+                                                                movimentacao
+                                                            )
                                                                 ? "bg-pink-100 text-pink-700"
                                                                 : "bg-rose-100 text-rose-700"
-                                                            }`}
+                                                        }`}
                                                     >
                                                         {
                                                             movimentacao.tipo_movimentacao
@@ -464,46 +509,41 @@ function ListagemMovimentacoes(): JSX.Element {
 
                                                 </td>
 
-                                                {/* MOTIVO */}
                                                 <td className="max-w-[160px] px-5 py-4">
 
                                                     <p className="truncate text-pink-900">
                                                         {
-                                                            movimentacao.motivo ?? "—"
+                                                            movimentacao.motivo ??
+                                                            "—"
                                                         }
                                                     </p>
 
                                                 </td>
 
-                                                {/* QUANTIDADE */}
                                                 <td className="px-5 py-4 text-center font-semibold text-pink-900">
                                                     {
                                                         movimentacao.quantidade
                                                     }
                                                 </td>
 
-                                                {/* PREÇO UNITÁRIO */}
                                                 <td className="whitespace-nowrap px-5 py-4 text-pink-900">
                                                     {formatarValor(
                                                         movimentacao.preco_unitario
                                                     )}
                                                 </td>
 
-                                                {/* VALOR TOTAL */}
                                                 <td className="whitespace-nowrap px-5 py-4 font-semibold text-pink-900">
                                                     {formatarValor(
                                                         movimentacao.valor_total
                                                     )}
                                                 </td>
 
-                                                {/* DATA */}
                                                 <td className="whitespace-nowrap px-5 py-4 text-pink-500">
                                                     {formatarData(
                                                         movimentacao.data_movimentacao
                                                     )}
                                                 </td>
 
-                                                {/* AÇÕES */}
                                                 <td className="px-5 py-4">
 
                                                     <div className="flex items-center justify-center gap-2">
@@ -515,7 +555,7 @@ function ListagemMovimentacoes(): JSX.Element {
                                                                     `/detalhes/movimentacao/${movimentacao.id_movimentacao}`
                                                                 )
                                                             }
-                                                            className="rounded-lg bg-purple-100 px-3 py-2 text-xs font-semibold text-pink-700 transition hover:bg-pink-600 hover:text-white"
+                                                            className="rounded-lg bg-pink-100 px-3 py-2 text-xs font-semibold text-pink-700 transition hover:bg-pink-600 hover:text-white"
                                                         >
                                                             Detalhes
                                                         </button>
@@ -539,7 +579,7 @@ function ListagemMovimentacoes(): JSX.Element {
                                                                     movimentacao.id_movimentacao
                                                                 )
                                                             }
-                                                            className="rounded-lg bg-red-100 px-3 py-2 text-xs font-semibold text-red-700 transition hover:bg-red-500 hover:text-white"
+                                                            className="rounded-lg bg-pink-300 px-3 py-2 text-xs font-semibold text-pink-900 transition hover:bg-pink-800 hover:text-white"
                                                         >
                                                             Excluir
                                                         </button>
@@ -563,7 +603,7 @@ function ListagemMovimentacoes(): JSX.Element {
 
                                             <div className="flex flex-col items-center">
 
-                                                <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-purple-100 text-xl text-pink-700">
+                                                <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-pink-100 text-xl text-pink-600">
                                                     <i className="pi pi-arrow-right-arrow-left" />
                                                 </div>
 
@@ -590,15 +630,15 @@ function ListagemMovimentacoes(): JSX.Element {
 
                     </div>
 
-                    {/* PAGINAÇÃO */}
-                    <div className="flex flex-col gap-4 border-t border-pink-200 bg-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex flex-col gap-4 border-t border-pink-100 bg-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
 
-                        <p className="text-sm text-pink-700">
+                        <p className="text-sm text-pink-600">
 
                             Mostrando{" "}
 
                             <span className="font-semibold text-pink-800">
-                                {movimentacoesFiltradas.length > 0
+                                {movimentacoesFiltradas.length >
+                                0
                                     ? indexOfFirstRow + 1
                                     : 0}
                             </span>{" "}
@@ -615,7 +655,9 @@ function ListagemMovimentacoes(): JSX.Element {
                             de{" "}
 
                             <span className="font-semibold text-pink-800">
-                                {movimentacoesFiltradas.length}
+                                {
+                                    movimentacoesFiltradas.length
+                                }
                             </span>{" "}
 
                             resultados
@@ -631,7 +673,9 @@ function ListagemMovimentacoes(): JSX.Element {
                                         currentPage - 1
                                     )
                                 }
-                                disabled={currentPage === 1}
+                                disabled={
+                                    currentPage === 1
+                                }
                                 className="rounded-lg border border-pink-200 bg-white px-3 py-2 text-sm text-pink-700 transition hover:bg-pink-50 disabled:cursor-not-allowed disabled:opacity-40"
                             >
                                 <i className="pi pi-chevron-left" />
@@ -651,10 +695,12 @@ function ListagemMovimentacoes(): JSX.Element {
                                     onClick={() =>
                                         paginate(page)
                                     }
-                                    className={`min-w-9 rounded-lg px-3 py-2 text-sm font-medium transition ${currentPage === page
+                                    className={`min-w-9 rounded-lg px-3 py-2 text-sm font-medium transition ${
+                                        currentPage ===
+                                        page
                                             ? "bg-pink-600 text-white shadow-sm"
                                             : "border border-pink-200 bg-white text-pink-700 hover:bg-pink-50"
-                                        }`}
+                                    }`}
                                 >
                                     {page}
                                 </button>
