@@ -248,17 +248,17 @@ function ListagemMovimentacoes(): JSX.Element {
                     <div>
                         <div className="mb-1 flex items-center gap-2">
 
-                            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 text-purple-700">
+                            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-pink-100 text-pink-700">
                                 <i className="pi pi-arrow-right-arrow-left" />
                             </span>
 
-                            <h1 className="text-2xl font-bold tracking-tight text-purple-800 sm:text-3xl">
+                            <h1 className="text-2xl font-bold tracking-tight text-pink-800 sm:text-3xl">
                                 Movimentações
                             </h1>
 
                         </div>
 
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-pink-700">
                             Acompanhe as movimentações de estoque do sistema.
                         </p>
                     </div>
@@ -297,7 +297,7 @@ function ListagemMovimentacoes(): JSX.Element {
                             value={busca}
                             onChange={handleBusca}
                             placeholder="Buscar por produto, tipo, motivo ou observação..."
-                            className="w-full rounded-lg border border-gray-300 bg-white py-3 pl-11 pr-10 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
+                            className="w-full rounded-lg border border-pink-200 bg-white py-3 pl-11 pr-10 text-sm text-pink-900 outline-none transition placeholder:text-pink-400 focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
                         />
 
                         {busca && (
@@ -307,7 +307,7 @@ function ListagemMovimentacoes(): JSX.Element {
                                     setBusca("");
                                     setCurrentPage(1);
                                 }}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-sm text-gray-600 transition hover:bg-pink-100 hover:text-pink-600"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-sm text-pink-700 transition hover:bg-pink-100 hover:text-pink-600"
                             >
                                 <i className="pi pi-times" />
                             </button>
@@ -324,11 +324,11 @@ function ListagemMovimentacoes(): JSX.Element {
                     <div className="flex flex-col gap-2 border-b border-pink-200 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
 
                         <div>
-                            <h2 className="font-semibold text-purple-800">
+                            <h2 className="font-semibold text-pink-800">
                                 Lista de movimentações
                             </h2>
 
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-pink-500">
                                 {movimentacoesFiltradas.length}{" "}
                                 {movimentacoesFiltradas.length === 1
                                     ? "movimentação encontrada"
@@ -337,7 +337,7 @@ function ListagemMovimentacoes(): JSX.Element {
                         </div>
 
                         {busca && (
-                            <span className="rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-700">
+                            <span className="rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-pink-700">
                                 Busca: "{busca}"
                             </span>
                         )}
@@ -349,7 +349,7 @@ function ListagemMovimentacoes(): JSX.Element {
 
                         <table className="w-full min-w-[1000px] text-left text-sm">
 
-                            <thead className="bg-purple-800 text-xs uppercase tracking-wide text-white">
+                            <thead className="bg-pink-700 text-xs uppercase tracking-wide text-white">
 
                                 <tr>
 
@@ -393,7 +393,7 @@ function ListagemMovimentacoes(): JSX.Element {
 
                             </thead>
 
-                            <tbody className="divide-y divide-gray-200">
+                            <tbody className="divide-y divide-pink-100">
 
                                 {carregando ? (
 
@@ -402,9 +402,9 @@ function ListagemMovimentacoes(): JSX.Element {
                                             colSpan={9}
                                             className="px-5 py-14 text-center"
                                         >
-                                            <div className="flex flex-col items-center gap-3 text-gray-500">
+                                            <div className="flex flex-col items-center gap-3 text-pink-500">
 
-                                                <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-100 border-t-purple-600" />
+                                                <div className="h-8 w-8 animate-spin rounded-full border-4 border-pink-100 border-t-pink-600" />
 
                                                 <span className="text-sm">
                                                     Carregando movimentações...
@@ -427,7 +427,7 @@ function ListagemMovimentacoes(): JSX.Element {
                                             >
 
                                                 {/* ID */}
-                                                <td className="px-5 py-4 font-medium text-gray-400">
+                                                <td className="px-5 py-4 font-medium text-pink-400">
                                                     #
                                                     {
                                                         movimentacao.id_movimentacao
@@ -437,7 +437,7 @@ function ListagemMovimentacoes(): JSX.Element {
                                                 {/* PRODUTO */}
                                                 <td className="px-5 py-4">
 
-                                                    <span className="rounded-md bg-purple-100 px-2.5 py-1 font-mono text-xs font-medium text-purple-700">
+                                                    <span className="rounded-md bg-purple-100 px-2.5 py-1 font-mono text-xs font-medium text-pink-700">
                                                         #
                                                         {
                                                             movimentacao.id_produto
@@ -453,8 +453,8 @@ function ListagemMovimentacoes(): JSX.Element {
                                                         className={`inline-flex min-w-20 justify-center rounded-full px-2.5 py-1 text-xs font-bold ${isEntrada(
                                                             movimentacao
                                                         )
-                                                                ? "bg-emerald-950 text-emerald-400"
-                                                                : "bg-red-950 text-red-400"
+                                                                ? "bg-pink-100 text-pink-700"
+                                                                : "bg-rose-100 text-rose-700"
                                                             }`}
                                                     >
                                                         {
@@ -467,7 +467,7 @@ function ListagemMovimentacoes(): JSX.Element {
                                                 {/* MOTIVO */}
                                                 <td className="max-w-[160px] px-5 py-4">
 
-                                                    <p className="truncate text-gray-700">
+                                                    <p className="truncate text-pink-900">
                                                         {
                                                             movimentacao.motivo ?? "—"
                                                         }
@@ -476,28 +476,28 @@ function ListagemMovimentacoes(): JSX.Element {
                                                 </td>
 
                                                 {/* QUANTIDADE */}
-                                                <td className="px-5 py-4 text-center font-semibold text-gray-800">
+                                                <td className="px-5 py-4 text-center font-semibold text-pink-900">
                                                     {
                                                         movimentacao.quantidade
                                                     }
                                                 </td>
 
                                                 {/* PREÇO UNITÁRIO */}
-                                                <td className="whitespace-nowrap px-5 py-4 text-gray-700">
+                                                <td className="whitespace-nowrap px-5 py-4 text-pink-900">
                                                     {formatarValor(
                                                         movimentacao.preco_unitario
                                                     )}
                                                 </td>
 
                                                 {/* VALOR TOTAL */}
-                                                <td className="whitespace-nowrap px-5 py-4 font-semibold text-gray-800">
+                                                <td className="whitespace-nowrap px-5 py-4 font-semibold text-pink-900">
                                                     {formatarValor(
                                                         movimentacao.valor_total
                                                     )}
                                                 </td>
 
                                                 {/* DATA */}
-                                                <td className="whitespace-nowrap px-5 py-4 text-gray-500">
+                                                <td className="whitespace-nowrap px-5 py-4 text-pink-500">
                                                     {formatarData(
                                                         movimentacao.data_movimentacao
                                                     )}
@@ -515,7 +515,7 @@ function ListagemMovimentacoes(): JSX.Element {
                                                                     `/detalhes/movimentacao/${movimentacao.id_movimentacao}`
                                                                 )
                                                             }
-                                                            className="rounded-lg bg-purple-100 px-3 py-2 text-xs font-semibold text-purple-700 transition hover:bg-purple-600 hover:text-white"
+                                                            className="rounded-lg bg-purple-100 px-3 py-2 text-xs font-semibold text-pink-700 transition hover:bg-pink-600 hover:text-white"
                                                         >
                                                             Detalhes
                                                         </button>
@@ -527,7 +527,7 @@ function ListagemMovimentacoes(): JSX.Element {
                                                                     `/atualizar/movimentacao/${movimentacao.id_movimentacao}`
                                                                 )
                                                             }
-                                                            className="rounded-lg bg-emerald-100 px-3 py-2 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-500 hover:text-white"
+                                                            className="rounded-lg bg-rose-100 px-3 py-2 text-xs font-semibold text-rose-700 transition hover:bg-rose-600 hover:text-white"
                                                         >
                                                             Editar
                                                         </button>
@@ -563,15 +563,15 @@ function ListagemMovimentacoes(): JSX.Element {
 
                                             <div className="flex flex-col items-center">
 
-                                                <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-purple-100 text-xl text-purple-700">
+                                                <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-purple-100 text-xl text-pink-700">
                                                     <i className="pi pi-arrow-right-arrow-left" />
                                                 </div>
 
-                                                <h3 className="font-semibold text-purple-800">
+                                                <h3 className="font-semibold text-pink-800">
                                                     Nenhuma movimentação encontrada
                                                 </h3>
 
-                                                <p className="mt-1 text-sm text-gray-500">
+                                                <p className="mt-1 text-sm text-pink-500">
                                                     Tente pesquisar por outro produto,
                                                     tipo, motivo ou observação.
                                                 </p>
@@ -593,11 +593,11 @@ function ListagemMovimentacoes(): JSX.Element {
                     {/* PAGINAÇÃO */}
                     <div className="flex flex-col gap-4 border-t border-pink-200 bg-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
 
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-pink-700">
 
                             Mostrando{" "}
 
-                            <span className="font-semibold text-purple-800">
+                            <span className="font-semibold text-pink-800">
                                 {movimentacoesFiltradas.length > 0
                                     ? indexOfFirstRow + 1
                                     : 0}
@@ -605,7 +605,7 @@ function ListagemMovimentacoes(): JSX.Element {
 
                             até{" "}
 
-                            <span className="font-semibold text-purple-800">
+                            <span className="font-semibold text-pink-800">
                                 {Math.min(
                                     indexOfLastRow,
                                     movimentacoesFiltradas.length
@@ -614,7 +614,7 @@ function ListagemMovimentacoes(): JSX.Element {
 
                             de{" "}
 
-                            <span className="font-semibold text-purple-800">
+                            <span className="font-semibold text-pink-800">
                                 {movimentacoesFiltradas.length}
                             </span>{" "}
 
@@ -632,7 +632,7 @@ function ListagemMovimentacoes(): JSX.Element {
                                     )
                                 }
                                 disabled={currentPage === 1}
-                                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-purple-700 transition hover:bg-pink-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                className="rounded-lg border border-pink-200 bg-white px-3 py-2 text-sm text-pink-700 transition hover:bg-pink-50 disabled:cursor-not-allowed disabled:opacity-40"
                             >
                                 <i className="pi pi-chevron-left" />
                             </button>
@@ -653,7 +653,7 @@ function ListagemMovimentacoes(): JSX.Element {
                                     }
                                     className={`min-w-9 rounded-lg px-3 py-2 text-sm font-medium transition ${currentPage === page
                                             ? "bg-pink-600 text-white shadow-sm"
-                                            : "border border-gray-300 bg-white text-purple-700 hover:bg-pink-50"
+                                            : "border border-pink-200 bg-white text-pink-700 hover:bg-pink-50"
                                         }`}
                                 >
                                     {page}
@@ -672,7 +672,7 @@ function ListagemMovimentacoes(): JSX.Element {
                                     currentPage ===
                                     totalPages
                                 }
-                                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-purple-700 transition hover:bg-pink-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                className="rounded-lg border border-pink-200 bg-white px-3 py-2 text-sm text-pink-700 transition hover:bg-pink-50 disabled:cursor-not-allowed disabled:opacity-40"
                             >
                                 <i className="pi pi-chevron-right" />
                             </button>
